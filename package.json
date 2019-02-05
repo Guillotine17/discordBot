@@ -1,0 +1,11 @@
+{
+    "name": "swb-bot",
+    "version": "1.0.0",
+    "description": "swBot, my discord bot",
+    "main": "bot.js",
+    "author": "bryan.sean@gmail.com",
+    "dependencies": {
+        "discord.js": "^11.4.2",
+        "winston": "^3.2.1"
+    }
+}
