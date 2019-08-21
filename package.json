@@ -6,6 +6,16 @@
     "author": "bryan.sean@gmail.com",
     "dependencies": {
         "discord.js": "^11.4.2",
+        "mysql": "^2.17.1",
         "winston": "^3.2.1"
+    },
+    "scripts" : {
+        "deploy" : "rsync -avz --exclude=node_modules --exclude=.git -e \"ssh -i ~/.ssh/swb_ec2_key_2.pem\" . ubuntu@ec2-184-73-73-84.compute-1.amazonaws.com:/home/ubuntu/projects/discordBot",
+        "copyServiceLocal" : "./utils/copyservice.sh",
+        "copyServiceRemote" : "ssh -i ~/.ssh/swb_ec2_key_2.pem ubuntu@ec2-184-73-73-84.compute-1.amazonaws.com 'cd projects/discordBot; ./utils/copyservice.sh'",
+        "startServiceLocal" : "./utils/startbot.sh",
+        "startServiceRemote" : "ssh -i ~/.ssh/swb_ec2_key_2.pem ubuntu@ec2-184-73-73-84.compute-1.amazonaws.com 'cd projects/discordBot; ./utils/startbot.sh'",
+        "stopServiceLocal" : "./utils/stopservice.sh",
+        "stopServiceRemote" : "ssh -i ~/.ssh/swb_ec2_key_2.pem ubuntu@ec2-184-73-73-84.compute-1.amazonaws.com 'cd projects/discordBot; ./utils/stopservice.sh'"
     }
 }
