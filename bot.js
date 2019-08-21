@@ -66,19 +66,26 @@ bot.on('message', message => {
                         throw new Error('TRAISH');
                     };
                     if (getEnforcerResult.enforcer) {
-                        message.reply('shalom, enforcer');
-                        mentionedUsers.forEach((mentionedUser) => {
-                            getRecipientPromises.push(dbStuff.getUserOrCreate(mentionedUser));
+                        getEnforcerResult.demeritgivencount += mentionedUsers.length;
+                        dbStuff.updateDemeritsGiven(getEnforcerResult.snowflake, getEnforcerResult.demeritgivencount).then((result) => {
+                            message.reply('shalom, enforcer');
+                            mentionedUsers.forEach((mentionedUser) => {
+                                getRecipientPromises.push(dbStuff.getUserOrCreate(mentionedUser));
+                            });
                         });
                     }
                     return Promise.all(getRecipientPromises);
                 }).then(function(getUserResults) {
+                    var applyDemeritsPromises = [];
                     getUserResults.forEach(function(user) {
                         console.log('getUserResult');
                         console.log(user);
-                        dbStuff.applyDemerit(user).then((result) => {
-                            message.reply(`${user.username} new demerit count: ${result.count}`);
-                        });
+                        applyDemeritsPromises.push(dbStuff.applyDemerit(user));
+                        return Promise.all(applyDemeritsPromises);
+                    });
+                }).then((applyDemeritResults) => {
+                    applyDemeritResults.forEach((result) => {
+                        message.reply(`${result.username} new demerit count: ${result.count}`);
                     });
                 }).catch((err) => {
                     logger.error(err);

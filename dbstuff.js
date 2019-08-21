@@ -79,7 +79,24 @@ function getUserOrCreate(userObj) {
     });
   });
 }
-
+function updateDemeritsGiven(snowflake, newDemeritCount) {
+  return new Promise((resolve, reject) => {
+    const connection = getConnection();
+    connection.connect(function(err) {
+      if (err) handleErr(reject, connection, err);
+      var query = `update ${USERS_TABLE_NAME} set demeritgivencount = ${newDemeritCount} where snowflake = '${snowflake}';`;
+      console.log(query);
+      connection.query(query, function(err, result, fields) {
+        if (err) handleErr(reject, connection, err);
+        else {
+          connection.end();
+          result.count = newDemeritCount;
+          resolve(result);
+        }
+      });
+    });
+  });
+}
 function applyDemerit(userResultObj) {
   return new Promise((resolve, reject) => {
     const connection = getConnection();
@@ -94,6 +111,7 @@ function applyDemerit(userResultObj) {
         else {
           connection.end();
           result.count = newDemeritCount;
+          result.username = userResultObj.username;
           resolve(result);
         }
       });
@@ -101,17 +119,18 @@ function applyDemerit(userResultObj) {
   });
 }
 
-
 function handleErr(rejectFunction, connection, err) {
   console.log('handle err called');
   connection.end();
   rejectFunction(err);
 }
+
 exports.applyDemerit = applyDemerit;
 exports.listPosters = listPosters;
 exports.getUser = getUser;
 exports.createUser = createUser;
 exports.getUserOrCreate = getUserOrCreate;
+exports.updateDemeritsGiven = updateDemeritsGiven;
 
 // con.connect(function(err) {
 //     if (err) throw err;
