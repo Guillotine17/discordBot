@@ -11,4 +11,6 @@ systemctl status discordBot.service
 
 // stop service
 sudo systemctl stop discordBot
-ssh -i ~/.ssh/swb_ec2_key_2.pem ubuntu@ec2-184-73-73-84.compute-1.amazonaws.com 'cd projects/discordBot; touch proof.txt'
+ssh -i ~/.ssh/swb_ec2_key_2.pem ubuntu@ec2-184-73-73-84.compute-1.amazonaws.com 'cd projects/discordBot; ./utils/startbot.sh'
+ssh -i ~/.ssh/swb_ec2_key_2.pem ubuntu@ec2-184-73-73-84.compute-1.amazonaws.com 'cd projects/discordBot; ./utils/copyservice.sh'
+ssh -i ~/.ssh/swb_ec2_key_2.pem ubuntu@ec2-184-73-73-84.compute-1.amazonaws.com 'cd projects/discordBot; ./utils/stopservice.sh'
